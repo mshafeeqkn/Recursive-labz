@@ -1,0 +1,47 @@
+Timer_A 16 bit timer/counter
+============================
+	* three capture/Compare reg
+	* support multiple capture/compare, PWM outputs and
+interval timer.
+	* Interrupt @ overflow and each capture and compare
+
+Registers
+---------
+	* TAR: Timer_A register - 16 bit of counter value, It may be cleared 
+by setting TACLR (Setting TACLR: Clearing clock devide, Count direction mode) 
+	* TASSELx: Selects from differnt clock source (ACLK,SMCLK,TACLK,INCLK)
+	* IDx: Select prescalar (2,4,8)
+	* TACCRx: Timer A Capture and Compare Register 0,1,2
+	* MCx: Mode control-(Stop,up,cont,up/down)
+	  Up: counts 0 to 0xFFFF upto TACCR0 and reset TACCR0to 0
+		TAIFG sets @ TACCR0 to 0
+		TACCR0_CCIFG sets @ TACCR0-1 to TACCR0
+	  Cont: Counts from 0 to 0xFFFF continuously
+		TAIFG sets @ 0xFFFF t0 0
+			
+		Setting TACCR0 = val1 TACCR1 = val2
+		When interrupt occurs @ TACCR0 change the value to TACCR0+val1
+		if TACCR0+val1>Maxvalue;val1-=maxvalue;
+		When interrupt occurs @ TACCR1 change the value to TACCR1+val2
+		if TACCR1+val2>Maxvalue;val2-=maxvalue;
+
+	  Up/down: 0 t0 TACCR0, back to 0, again to TACCR0 and so on
+		TAIFG @ TACCR0=1 to 0
+		TACCR0_CCIFG @ TACCR0-1 to TACCR0
+
+
+
+
+Register Used
+=============
+
+	TACTL
+
+	15-10: Unused
+	09-08: Timer_A Clock select(TASSELx)
+	7-6  : Input devider/Prescalar(IDx)
+	5-4  : Mode control(MCx)
+	3    : Unused
+	2    : Timer_A clear (TACLR)
+	1    : Timer_A interrupt enable(TAIE)
+	0    : Timer_A Interrupt flag(TAIF)
