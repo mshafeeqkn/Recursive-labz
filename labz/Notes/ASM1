@@ -1,0 +1,4 @@
+mov.b #1 &0x22: Moving a byte '1' to an adress 0x22
+mov.w #1 &0x22: Moving a word
+	[First operend is sourse
+
